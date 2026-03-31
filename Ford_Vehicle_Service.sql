@@ -12,9 +12,20 @@ GO
 				----MEASURES
 				Service_Cost decimal(10,2),
 				LABOUR_HOURS int,
-				PARTS_Cost decimal(10,2),
-				HOURS_Worked int
+				HOURS_Worked int,
+				hours_billed decimal(10,2)
 );
+----////////////////////////////////////------------------------------
+				Alter table Ford_service
+				drop column parts_cost  ---I have removed the parts_cost because I have dim_parts which
+										-----is dimensional table
+
+										Alter table ford_dervice
+										drop column 
+
+				alter table ford_service
+				add hours_billed decimal(10,2) -----added a new column to help get the accurate amount of how the client has been 
+												----charged
 
 
 go
@@ -43,9 +54,13 @@ go
 		(104, 'Kwenzi','Nkuna','PHOOKO','2117143@vut.ac.za','072863965777' ),
 		(105, 'Msotra','Lakhozeni','Malelane','Mabaso@gmail.com','07286396666' )
 
-		SELECT *FROM Dim_Customer
-		UPDATE Dim_Customer
-		SET EMAIL = 'welcomeshongwe1016@gmail.com'
+
+
+
+		SELECT *FROM Dim_Customer----helps by showing all the table
+
+		UPDATE Dim_Customer    ---// I was had to write the email is correct
+		SET EMAIL = 'welcomeshongwe101@gmail.com'
 		where customerID = 101
 ---------------------------------------------------------------------------------------------
 
@@ -93,6 +108,9 @@ Values
 	
 	select * from dim_Mechanic
 	------------------------------------------------------------------------------------------------------------------------------
+	-----////////////////////////////////////////////////////////////-----------//////////////////////////////////
+
+
 	create table Dim_ServiceTicket(
 		Service_Ticket_ID int primary key,
 		service_status varchar(50),
@@ -134,6 +152,7 @@ Values
 
 	select * from dim_parts
 	------------------------------------------------------------------------------------------------------------------------------
+	----/////////////////////////////////////////////////////////////////////////////////////////////////////////-------------
 	create table Dim_Date(
 		DateID int primary key,
 		Date date,
@@ -159,10 +178,42 @@ DROP COLUMN datetime-------I was removing a column in an exisiting table
 ALTER TABLE dim_DATE
 DROP COLUMN time ------column removed
 
-
 Alter Table Dim_Date
 add time int  ----added an new column in an existing table
 
-EXEC sp_rename 'Dim_Date.time' --renamed a column in an existing table
+--EXEC sp_rename 'Dim_Date.time' --renamed a column in an existing table
+--------------------------------------------------------------------------------------------------------------------------------
+----//////////////////////////////////////////////////////////////////////////////////////////////////////----------------
+
+--UTILIZING THE MEASURES FROM THE FACT TABLE
+
+---*WE HAVE	*Service_Cost decimal(10,2),*Total amount spent 
+			---*LABOUR_HOURS-- mechanic have to finish the job at the giben time
+				---* HOURS_Worked---  time spent by the mechanic in fixing the vehicle
+				----*Hours_billed * Time spent on task a client needs to pay 
+
+				insert into Ford_service (CustomerID,MechanicID,HOURS_Worked,LABOUR_HOURS,hours_billed,Service_Cost)
+							values
+							(103,1,7,5,6,5000),
+							(104,2,7,6,7,7000),
+							(105,3,8,4,6,11000),
+							(101,5,24,15,28,150000),
+							(102,4,11,7,9,45000)
 
 
+
+						With CTE AS (
+									SELECT *, ROW_NUMBER() OVER( PARTITION BY CustomerID,MechanicID,HOURS_Worked,LABOUR_HOURS,hours_billed,Service_Cost
+									ORDER BY (SELECT NULL)) AS RowNum
+									from ford_service)
+									delete from CTE
+									where RowNum >1; --------here I had duplicates of same rows and column ,everything was the same 
+													---So I used the Common Table Expression, I needed only  single data that is why I applied 
+													--the >1 operator to remove all the duplicates and leave 1
+
+													delete from ford_service ---I had mis matching values from customerId
+													where CustomerID= 101
+													--------
+														delete from ford_service
+													where CustomerID in( 101, 102)--we used the in to multiple delete 
+																	--the IN allows you to put multiple values in a single line
