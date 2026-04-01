@@ -21,6 +21,7 @@ Build a foundation for data engineering and analytics
 The system uses a star schema, which includes:
 
 🔹 Fact Table
+
 ford_service
 CustomerID
 VehicleID
@@ -31,6 +32,7 @@ Service_Cost
 Labour_Hours
 
 🔹 Dimension Tables
+
 Customers
 Vehicles
 Mechanics
@@ -46,6 +48,8 @@ Data Modeling (Star Schema)
 Visual Studio Code
 
 📊 Key Features
+
+
 Track customer service history
 Monitor mechanic performance
 Analyze service costs and labor hours
@@ -53,12 +57,16 @@ Perform advanced SQL queries (JOINs, aggregations, filtering)
 Generate insights for business decision-making
 
 📈 Sample Use Cases
+
+
 Identify the most expensive services
 Calculate total revenue from services
 Analyze workload distribution among mechanics
 Track vehicle service frequency
 
 🚀 Future Improvements
+
+
 Build ETL pipelines for automated data ingestion
 Integrate with tools like Power BI or Tableau for visualization
 Add a front-end interface for user interaction
@@ -66,6 +74,7 @@ Implement real-time data processing
 📚 Learning Outcomes
 
 This project demonstrates:
+
 
 Database design and normalization
 Star schema modeling for analytics
