@@ -10,6 +10,7 @@ The Car Service Management System is a data-driven project designed to manage an
 The project is built using SQL and follows a star schema data model, making it ideal for analytical queries and reporting. It is particularly useful for understanding how data engineering concepts can be applied in the automotive service industry.
 
 🎯 Objectives
+
 Design a structured database for car service operations
 Implement a fact table and multiple dimension tables
 Perform SQL queries for insights and reporting
