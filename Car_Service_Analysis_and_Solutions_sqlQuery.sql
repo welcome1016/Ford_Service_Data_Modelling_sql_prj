@@ -20,3 +20,12 @@
 							WHERE C.VehicleID IS not NULL
 
 							SELECT TOP 10 * FROM DIM_VEHICLE;
+
+------2. LEFT JOIN: Show all customers and their service records, including those who never serviced a
+---car.
+			SELECT * FROM ford_service
+			ALTER TABLE ford_service
+			DROP COLUMN VehicleID,CUSTOMERID,MECHANICID,ServiceTicketID,DateID
+
+			----HERE I WAS SORTING OUT THE COLUMN FOR MEASURES TO BE IN THE CORRECT TABLE, 
+			---I DROPPED THE COLUMNS TO BE ABLE TO JOIN THE TABLES WITHOUT ANY ISSUE, I WILL RECREATE THE COLUMNS LATER
