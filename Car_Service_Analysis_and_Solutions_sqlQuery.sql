@@ -41,6 +41,8 @@
 					left join dim_Mechanic d on m.mechanicID = d.mechanicID
 					left join Dim_ServiceTicket s on m.service_ticket_id= s.service_ticket_id
 
+---Multi-Table JOIN: Display customer name, vehicle make & model, service type, mechanic
+---specialization, and service cost.
 
 
 Select c.FirstName,
@@ -54,18 +56,38 @@ Select c.FirstName,
 					d.specialization,
 					m.service_cost,
 					m.labour_hours,
-					m.hours_billed,
-					v.VehicleID,
-					c.CustomerID
+					m.hours_billed
+				
 					from ford_service m
-				right join dim_customer c on m.customerID =c.customerID
-					right join dim_Vehicle v on m.vehicleId = v.vehicleId
-				right	join dim_Mechanic d on m.mechanicID = d.mechanicID
-					right join Dim_ServiceTicket s on m.service_ticket_id= s.service_ticket_id
+				join dim_customer c on m.customerID =c.customerID
+					join dim_Vehicle v on m.vehicleId = v.vehicleId
+				join dim_Mechanic d on m.mechanicID = v.VehicleID
+					 join Dim_ServiceTicket s on m.service_ticket_id= s.service_ticket_id
 			
 		
+		 ------Subquery: Find all services where Service_Cost is greater than the average service cost.
+							
+							select 
+							service_type,
+									m.service_cost
+							from Dim_ServiceTicket d
+									left join ford_service m on d.Service_Ticket_ID = m.service_Ticket_Id
+
+									where m.Service_Cost > (select avg(service_cost) from ford_service)
 
 
+									select avg(service_cost)
+									from ford_service
+							
+						. ---Correlated Subquery: Find customers who have spent more than the average spending of all
+						`	-----customers.
+						
+								select c.firstName ,
+								c.LastName,
+								m.service_cost as highest_customer_spender
+								from Dim_Customer c
+									left join ford_service m on c.customerID = m.customerID
+									where m.Service_Cost > (select avg(service_cost) as customer_average from ford_service)
 
 
 
