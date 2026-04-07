@@ -89,6 +89,14 @@ Select c.FirstName,
 									left join ford_service m on c.customerID = m.customerID
 									where m.Service_Cost > (select avg(service_cost) as customer_average from ford_service)
 
+									--6. Window Function (ROW_NUMBER): For each mechanic, assign a row number based on highest
+                                ---hours worked.
+											Select d.FirstName,d.LastName,
+													m.Hours_worked,
+													Row_number () over(order by m.hours_worked Desc) as highest_hours_worked
+													from dim_Mechanic d 
+													left join ford_service m on d.MechanicID = m.MechanicID 
+
 
 
 
