@@ -97,8 +97,13 @@ Select c.FirstName,
 													from dim_Mechanic d 
 													left join ford_service m on d.MechanicID = m.MechanicID 
 
-
-
+									--7	---Ranking: Rank mechanics based on total hours worked using RANK() and DENSE_RANK().
+									Select d.FirstName,d.LastName,
+													m.Hours_worked,
+													dense_rank () over(order by m.hours_worked Desc) as dense_total_hours_worked,
+													rank () over(order by m.hours_worked Desc) as ranked_total_hours_worked
+													from dim_Mechanic d 
+													left join ford_service m on d.MechanicID = m.MechanicID
 
 
 
