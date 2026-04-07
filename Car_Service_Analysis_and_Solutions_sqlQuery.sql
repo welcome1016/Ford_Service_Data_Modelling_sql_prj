@@ -8,14 +8,12 @@
 							D.service_cost, 
 							D.hours_billed
 						from ford_service D
-						left join Dim_Customer  A on D.CustomerID = A.customerID 
-					left join dim_Mechanic B on D.MechanicID =B.MechanicID
-						left join dim_Vehicle C on D.VehicleID = C.VehicleID
+						inner join Dim_Customer  A on D.CustomerID = A.customerID 
+					inner join dim_Mechanic B on D.MechanicID =B.MechanicID
+						inner join dim_Vehicle C on D.VehicleID = C.VehicleID
 					
 
-							-
-
-							SELECT TOP 10 * FROM DIM_VEHICLE;
+							
 
 ------2. LEFT JOIN: Show all customers and their service records, including those who never serviced a
 ---car.
@@ -26,87 +24,65 @@
 			----HERE I WAS SORTING OUT THE COLUMN FOR MEASURES TO BE IN THE CORRECT TABLE, 
 			---I DROPPED THE COLUMNS TO BE ABLE TO JOIN THE TABLES WITHOUT ANY ISSUE, I WILL RECREATE THE COLUMNS LATER
 
-			---2. LEFT JOIN: Show all customers and their service records, including those who never serviced a
-			---car.
-						SELECT A.firstName,
-						A.LastName,
-						A.contact,
-						B.ServiceID
-						from Dim_Customer as A
-						left join Dim_ServiceTicket  as B 
-						on A.customerID = B.
-						
+			Select c.FirstName,
+					c.LastName,
+					s.service_status,
+					v.RegistrationNumber,
+					v.carModel,
+					d.firstName as mechanic,
+					d.specialization,
+					m.service_cost,
+					m.labour_hours,
+					m.hours_billed
 
-						alter table ford_service
-						add CustomerID int,
-						VehicleID INT,
-						PartID int,
-						ServiceID int,
-						Service_Ticket_ID Int,
-						MechanicID int
+					from ford_service m
+					left join dim_customer c on m.customerID =c.customerID
+					left join dim_Vehicle v on m.vehicleId = v.vehicleId
+					left join dim_Mechanic d on m.mechanicID = d.mechanicID
+					left join Dim_ServiceTicket s on m.service_ticket_id= s.service_ticket_id
 
 
-	SELECT 
-    c.FirstName,
-    v.CarModel,
-    f.Service_Cost,
-	B.service_status
-FROM ford_service f
 
-LEFT JOIN Dim_Customer c
-    ON f.CustomerID = c.CustomerID
+Select c.FirstName,
+					c.LastName,
+					s.service_status,
+					s.Service_type,
+					v.RegistrationNumber,
+					v.carModel,
+					v.carMake,
+					d.firstName as mechanic,
+					d.specialization,
+					m.service_cost,
+					m.labour_hours,
+					m.hours_billed,
+					v.VehicleID,
+					c.CustomerID
+					from ford_service m
+				right join dim_customer c on m.customerID =c.customerID
+					right join dim_Vehicle v on m.vehicleId = v.vehicleId
+				right	join dim_Mechanic d on m.mechanicID = d.mechanicID
+					right join Dim_ServiceTicket s on m.service_ticket_id= s.service_ticket_id
+			
+		
 
-LEFT JOIN Dim_Vehicle v
-    ON f.VehicleID = v.VehicleID
-
-	left join Dim_ServiceTicket as B 
-	on f.Service_Ticket_ID = B.service_Ticket_ID
 
 
-	select * from ford_service
 
 
-	SELECT * 
-FROM ford_service
-WHERE CustomerID IS NULL 
-   OR VehicleID IS NULL 
-   OR Service_Ticket_ID IS NULL;
 
-   SELECT 
-    f.CustomerID,
-    c.CustomerID,
-    c.FirstName
-FROM ford_service f
-LEFT JOIN Dim_Customer c
-    ON f.CustomerID = c.CustomerID;
 
-	SELECT 
-    f.VehicleID,
-    v.VehicleID,
-    v.CarModel
-FROM ford_service f
-LEFT JOIN Dim_Vehicle v
-    ON f.VehicleID = v.VehicleID;
 
-	SELECT *
-FROM ford_service f
-WHERE f.CustomerID NOT IN (
-    SELECT CustomerID FROM Dim_Customer
-);
 
-SELECT DISTINCT CustomerID
-FROM ford_service;
 
-SELECT CustomerID
-FROM Dim_Customer;
+
+
+
+
 
 UPDATE ford_service
-SET CustomerID = 101,
-    VehicleID = 201,
-    Service_Ticket_ID = 301
-WHERE Service_Cost = 2500;
-
-
+SET HOURS_Worked= null
+WHERE Service_Ticket_ID= 5
+										
 UPDATE ford_service
 SET 
     CustomerID = CASE 
